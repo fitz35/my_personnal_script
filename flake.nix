@@ -15,10 +15,12 @@
       stdenv.mkDerivation {
         name = "my_personnal_script";
         src = self;
-        buildPhase = "";
-        installPhase = ''
+        buildPhase = ''
           mkdir -p $out/bin;
           find ./* -type f \( -name "*.sh" -o -name "*.py" \) -exec cp {} $out/bin \;
+        '';
+        installPhase = ''
+          
           install -t $out/bin my_script.sh";
         '';
       };
