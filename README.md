@@ -4,7 +4,7 @@ This the repository where my automation script for my linux are.
 
 # Usage
 
-You can launch the my_scipt.sh script like this :
+You can launch the my_script.sh script like this :
 
 ```shell
 ./my_script.sh [script_name] <options>
