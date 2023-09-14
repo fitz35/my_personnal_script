@@ -2,9 +2,11 @@
 
 This the repository where my automation script for my linux are.
 
+* [ ] add package dependancies
+
 # Usage
 
-You can launch the my_script.sh script like this :
+You can launch the dispatch.sh script like this :
 
 ```shell
 ./my_script.sh [script_name] <options>
