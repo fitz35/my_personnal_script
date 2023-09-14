@@ -1,47 +1,77 @@
 
+
 {
   description = "flake support my_personnal_script nixos module";
 
   
-  inputs.flake-utils.url = "github:numtide/flake-utils";
   inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
 
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs }:
+    let
 
-    flake-utils.lib.eachDefaultSystem (system:
+      # to work with older version of flakes
+      lastModifiedDate = self.lastModifiedDate or self.lastModified or "19700101";
 
-      let
+      # Generate a user-friendly version number.
+      version = builtins.substring 0 8 lastModifiedDate;
 
-        pkgs = import nixpkgs { inherit system; };
+      # System types to support.
+      supportedSystems = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
 
-        my-name = "my_personnal_script";
+      # Helper function to generate an attrset '{ x86_64-linux = f "x86_64-linux"; ... }'.
+      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
 
-        my-buildInputs = with pkgs; [  ];
+      # Nixpkgs instantiated for supported system types.
+      nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; overlays = [ self.overlay ]; });
 
-        my-script = (pkgs.writeScriptBin my-name (builtins.readFile ./my_script.sh)).overrideAttrs(old: {
+    in
 
-          buildCommand = "${old.buildCommand}\n patchShebangs $out";
+    {
 
-        });
+      # A Nixpkgs overlay.
+      overlay = final: prev: {
 
-      in rec {
+        my_personnal_script = with final; stdenv.mkDerivation rec {
+          name = "my_personnal_script-${version}";
 
-        defaultPackage = packages.my-script;
+          unpackPhase = ":";
 
-        packages.my-script = pkgs.symlinkJoin {
+          buildPhase =
+            ''
+            '';
 
-          name = my-name;
-
-          paths = [ my-script ] ++ my-buildInputs;
-
-          buildInputs = [ pkgs.makeWrapper ];
-
-          postBuild = "wrapProgram $out/bin/${my-name} --prefix PATH : $out/bin";
-
+          installPhase =
+            ''
+              mkdir -p $out/bin;
+              find ./* -type f \( -name "*.sh" -o -name "*.py" \) -exec cp {} $out/bin \;
+              install -t $out/bin my_script.sh";
+            '';
         };
 
-      }
+      };
 
-    );
+      # Provide some binary packages for selected system types.
+      packages = forAllSystems (system:
+        {
+          inherit (nixpkgsFor.${system}) my_personnal_script;
+        });
 
+      # The default package for 'nix build'. This makes sense if the
+      # flake provides only one package or there is a clear "main"
+      # package.
+      defaultPackage = forAllSystems (system: self.packages.${system}.my_personnal_script);
+
+      # A NixOS module, if applicable (e.g. if the package provides a system service).
+      nixosModules.my_personnal_script =
+        { pkgs, ... }:
+        {
+          nixpkgs.overlays = [ self.overlay ];
+
+          environment.systemPackages = [ pkgs.my_personnal_script ];
+
+          #systemd.services = { ... };
+        };
+
+
+    };
 }
