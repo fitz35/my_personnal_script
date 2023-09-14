@@ -3,12 +3,12 @@
 # ROfi menu
 
 OPTIONS="Lock\nLogout\nReboot\nShutdown\nReturn"
-CHOICE=$(echo -e $OPTIONS | sh ../dispatch.sh rofi -dmenu -p "System")
+CHOICE=$(echo -e $OPTIONS | sh ../my_scipt.sh rofi -dmenu -p "System")
 
 case $CHOICE in
     Lock)
         # lock i3 session (keep )
-        sh ../dispatch.sh lock
+        sh ../my_scipt.sh lock
         ;;
     Logout)
         # thunderbird doexn't exit properly at logout

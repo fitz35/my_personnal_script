@@ -32,7 +32,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "-display_entry":
     
     # Display the uptimes using rofi
     menu_content = "\n".join(todays_uptimes)
-    subprocess.run(["sh", "../dispatch.sh", 'rofi', '-dmenu', '-p', 'Today\'s Uptimes'], input=menu_content, text=True)
+    subprocess.run(["sh", "../my_scipt.sh", 'rofi', '-dmenu', '-p', 'Today\'s Uptimes'], input=menu_content, text=True)
     sys.exit(0)
 
 # Get the current system uptime and extract the uptime string

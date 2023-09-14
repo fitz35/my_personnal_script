@@ -41,7 +41,7 @@ inside_folder=("${inside_folder[@]#"$parent_folder"}" "${hand_picked_folders_in_
 subfolders=("${inside_folder[@]}" "${hand_picked_folders[@]}")
 
 # Use rofi to create a menu with subfolders
-CHOICE=$(printf "%s\n" "${subfolders[@]}" | sh ../dispatch.sh rofi -dmenu -p "Select a folder to open $1 in ")
+CHOICE=$(printf "%s\n" "${subfolders[@]}" | sh ../my_scipt.sh rofi -dmenu -p "Select a folder to open $1 in ")
 
 # Check if the user made a selection
 if [ -n "$CHOICE" ]; then
