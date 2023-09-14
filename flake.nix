@@ -17,10 +17,10 @@
         src = self;
         buildPhase = ''
           mkdir -p $out/bin;
-          cp ./src/* $out/bin;
         '';
         installPhase = ''
-          install -t $out/bin my_script.sh;
+          cp -r ./src/* $out/bin;
+          chmod +x $out/bin/my_script.sh;
         '';
       };
 
