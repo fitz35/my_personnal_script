@@ -23,7 +23,6 @@
           i3lock  # lock screen
           kitty # terminal
           feh # wallpaper
-          greenclip # clipboard
         ];
 
         buildPhase = ''
