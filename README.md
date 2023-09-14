@@ -2,6 +2,15 @@
 
 This the repository where my automation script for my linux are.
 
+# Usage
+
+You can launch the dispatch.sh script like this :
+
+```shell
+./dispatch.sh [script_name] <options>
+```
+
+You can launch rofi with the same command. It will load a random configuration file.
 
 # Script description
 
