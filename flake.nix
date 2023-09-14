@@ -1,4 +1,3 @@
-
 {
   description = "flake support my_personnal_script nixos module";
 
@@ -19,7 +18,7 @@
         (system: f nixpkgs.legacyPackages.${system});
 
       my_personnal_script =
-        { pkgs, ... }:
+        { pkgs, splash ? "", customSplash ? splash != "", ... }:
         pkgs.stdenv.mkDerivation {
           name = "my_personnal_script_theme";
           src = "${self}";
@@ -47,18 +46,21 @@
     {
       nixosModules.default = { config, pkgs, ... }:
         let
+          
           inherit (nixpkgs.lib) mkOption types mkIf;
         in
         {
-        
-
-          packages = eachSystem
-            (pkgs: {
-              default = my_personnal_script {
-                inherit pkgs;
-                # splash = "custom splash text";
-              };
-            });
+          config = {
+            
+          };
         };
-    }
+
+      packages = eachSystem
+        (pkgs: {
+          default = my_personnal_script {
+            inherit pkgs;
+            # splash = "custom splash text";
+          };
+        });
+    };
 }
