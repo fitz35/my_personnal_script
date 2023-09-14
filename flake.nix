@@ -17,7 +17,7 @@
         src = self;
         buildPhase = ''
           mkdir -p $out/bin;
-          find ./* -type f \( -name "*.sh" -o -name "*.py" \) -exec cp {} $out/bin \
+          find ./* -type f \( -name "*.sh" -o -name "*.py" \) -exec cp {} $out/bin \;
         '';
         installPhase = ''
           install -t $out/bin my_script.sh"
