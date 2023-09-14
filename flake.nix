@@ -15,6 +15,17 @@
       stdenv.mkDerivation {
         name = "my_personnal_script";
         src = self;
+
+        packages = with pkgs; [ 
+          rofi # menu
+          python3 # python
+          i3 # window manager
+          i3lock  # lock screen
+          kitty # terminal
+          feh # wallpaper
+          greenclip # clipboard
+        ];
+
         buildPhase = ''
           mkdir -p $out/bin;
         '';
