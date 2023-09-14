@@ -7,7 +7,7 @@ This the repository where my automation script for my linux are.
 You can launch the dispatch.sh script like this :
 
 ```shell
-./dispatch.sh [script_name] <options>
+./my_script.sh [script_name] <options>
 ```
 
 You can launch rofi with the same command. It will load a random configuration file.
@@ -21,7 +21,7 @@ You can launch rofi with the same command. It will load a random configuration f
 To run the script, use the following command:
 
 ```shell
-./github_selector.sh option
+./my_script.sh github_selector option
 ```
 
 Replace `option` with the name of the action you want to perform on the selected folder. The available options should correspond to the scripts in the `github_menu_options` directory.
