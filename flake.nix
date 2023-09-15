@@ -41,7 +41,9 @@
 
           installPhase = ''
             cp -r ./src/* $out/bin;
-            chmod +x $out/bin/my_script.sh;
+            cp $out/bin/my_script.sh $out/bin/my_script;
+            chmod +x $out/bin/my_script;
+
           '';
         };
     in
