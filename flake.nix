@@ -44,7 +44,7 @@
             cp $out/bin/my_script.sh $out/bin/my_script;
             chmod +x $out/bin/my_script;
 
-          '';
+          '';# only expose my_script to the user (chmod +x)
         };
     in
     {
