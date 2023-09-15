@@ -1,30 +1,55 @@
 {
   description = "flake support my_personnal_script nixos module";
-
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-
-  outputs = { self, nixpkgs }: {
-    packages.x86_64-linux.default = with nixpkgs.legacyPackages.x86_64-linux; stdenv.mkDerivation {
-      name = "my_personnal_script_theme";
-      src = self;
-
-      buildInputs = with pkgs; [
-        rofi     # menu
-        python3  # python
-        i3       # window manager
-        i3lock   # lock screen
-        kitty    # terminal
-        feh      # wallpaper
-      ];
-
-      buildPhase = ''
-        mkdir -p $out/bin;
-      '';
-
-      installPhase = ''
-        cp -r ./src/* $out/bin;
-        chmod +x $out/bin/my_script.sh;
-      '';
-    };
+  
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # Add other inputs as needed
   };
+
+  outputs = { self, nixpkgs }:
+    let
+      inherit (nixpkgs.lib) genAttrs;
+
+      # Generate attributes for each supported system
+      eachSystem = f: genAttrs
+        [
+          "aarch64-darwin"
+          "aarch64-linux"
+          "x86_64-darwin"
+          "x86_64-linux"
+        ]
+        (system: f nixpkgs.legacyPackages.${system});
+
+      # Definition of your personal script theme package
+      myPersonalScriptTheme = { pkgs, ... }:
+        pkgs.stdenv.mkDerivation {
+          name = "my_personnal_script_theme";
+          src = self;
+
+          buildInputs = with pkgs; [
+            rofi
+            python3
+            i3
+            i3lock
+            kitty
+            feh
+          ];
+
+          buildPhase = ''
+            mkdir -p $out/bin;
+          '';
+
+          installPhase = ''
+            cp -r ./src/* $out/bin;
+            chmod +x $out/bin/my_script.sh;
+          '';
+        };
+    in
+    {
+      # Package definitions for various architectures
+      packages = eachSystem
+        (pkgs: {
+          default = myPersonalScriptTheme { inherit pkgs; };
+        });
+    };
 }
