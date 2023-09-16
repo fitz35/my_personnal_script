@@ -1,5 +1,7 @@
 #!/bin/bash
-source "../common.sh"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+source "$DIR/../common.sh"
 
 hand_picked_folders=(
     
@@ -22,7 +24,7 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-option="./github_menu_options/$1.sh"
+option="$DIR/github_menu_options/$1.sh"
 
 if [ ! -e $option ]; then
     echo "Error: $option does not exist"
@@ -41,7 +43,7 @@ inside_folder=("${inside_folder[@]#"$parent_folder"}" "${hand_picked_folders_in_
 subfolders=("${inside_folder[@]}" "${hand_picked_folders[@]}")
 
 # Use rofi to create a menu with subfolders
-CHOICE=$(printf "%s\n" "${subfolders[@]}" | sh ../my_script.sh rofi -dmenu -p "Select a folder to open $1 in ")
+CHOICE=$(printf "%s\n" "${subfolders[@]}" | sh $DIR/../my_script.sh rofi -dmenu -p "Select a folder to open $1 in ")
 
 # Check if the user made a selection
 if [ -n "$CHOICE" ]; then

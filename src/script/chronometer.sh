@@ -1,9 +1,10 @@
 #!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 TIMER_FILE="/tmp/polybar_chrono" # This file will be used to check if the timer is running (and keep track of the start time)
 ELAPSED_FILE="/tmp/polybar_chrono_elapsed" # This file will be used to keep track of the elapsed time (pause doesn't reset the timer)
 
-source ../common.sh
+source "$DIR/../common.sh"
 
 case "$1" in
     toggle)

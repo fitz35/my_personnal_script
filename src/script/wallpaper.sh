@@ -1,5 +1,4 @@
 #!/bin/bash
-
 interval=60 # The interval in seconds between each wallpaper change
 
 # Infinite loop

@@ -1,4 +1,5 @@
 #!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 BASE_TIME=60
 
@@ -6,7 +7,7 @@ TIMER_FILE="/tmp/polybar_timer" # This file will be used to check if the timer i
 ELAPSED_FILE="/tmp/polybar_timer_elapsed" # This file will be used to keep track of the elapsed time (pause doesn't reset the timer)
 END_DISPLAYED_FILE="/tmp/polybar_timer_end_displayed" # This file will be used to keep track of whether "END" was last displayed
 
-source ../common.sh
+source "$DIR/../common.sh"
 
 # create elapsed file if it doesn't exist
 if [ ! -f "$ELAPSED_FILE" ]; then
