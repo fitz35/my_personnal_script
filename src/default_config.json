@@ -1,3 +1,11 @@
 {
-    
+    "github_menu" : {
+        "parent_folders" : [
+            "~/Documents/github/"
+        ],
+        "hand_picked_folders" : [
+            "~/Documents/github/phdtrack_project_3/src/mem_to_graph/",
+            "~/Documents/github/perso-divers/document/"
+        ]
+    }
 }

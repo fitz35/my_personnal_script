@@ -18,7 +18,7 @@ scripts = [
 ]
 
 python_scripts = [
-    "uptime"
+    "uptime",
     "github_menu",
 ]
 

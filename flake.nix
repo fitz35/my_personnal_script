@@ -42,9 +42,13 @@
           installPhase = ''
             cp -r ./src/* $out/bin;
             cp $out/bin/my_script.sh $out/bin/my_script;
-            chmod +x $out/bin/my_script;
 
-          '';# only expose my_script to the user (chmod +x)
+            # Add src directory to the Python path
+            echo "export PYTHONPATH=\$PYTHONPATH:$out/bin/src" > $out/bin/my_script.pth
+
+            # only expose my_script to the user (chmod +x)
+            chmod +x $out/bin/my_script;
+          '';
         };
     in
     {

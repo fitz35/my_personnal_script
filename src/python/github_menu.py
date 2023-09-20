@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-import python.common as common
+import common as common
 
 # Equivalent of DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 DIR = os.path.dirname(os.path.abspath(__file__))
@@ -9,14 +9,9 @@ DIR = os.path.dirname(os.path.abspath(__file__))
 # --------------------- load config---------------------
 config = common.load_config()
 
-hand_picked_folders = [
-    "~/Documents/github/phdtrack_project_3/src/mem_to_graph/",
-    "~/Documents/github/perso-divers/document/"
-]
+hand_picked_folders = config["github_menu"]["hand_picked_folders"]
 
-parent_folders = [
-    "~/Documents/github/"
-]
+parent_folders = config["github_menu"]["parent_folders"]
 
 
 # --------------------- check arguments ---------------------
