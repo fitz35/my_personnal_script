@@ -1,20 +1,16 @@
 import os
 import subprocess
 import sys
-import json
 
+import python.common as common
 
 # This script is the entry point of the project.
 DIR = os.path.dirname(os.path.realpath(__file__))
 LIB_PATH = DIR
 
-DEFAULT_CONFIG = os.path.join(LIB_PATH, "default_config.json")
-CONFIG_PATH = os.path.expanduser("~/.config/my_script/config.json")
-
 scripts = [
     "chronometer",
     "timer",
-    "github_menu",
     "greenclip",
     "lock",
     "logout_menu",
@@ -23,25 +19,13 @@ scripts = [
 
 python_scripts = [
     "uptime"
+    "github_menu",
 ]
 
 
 # --------------------- load config---------------------
 
-def load_json_file(filename):
-    if not os.path.exists(filename):
-        return None
-
-    with open(filename, 'r') as file:
-        return json.load(file)
-
-default_config = load_json_file(DEFAULT_CONFIG)
-user_config = load_json_file(CONFIG_PATH)
-
-# Merge the two configs
-config = default_config
-if user_config:
-    config.update(user_config)
+config = common.load_config()
 
 
 # ----------------------------------------------------

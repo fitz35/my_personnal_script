@@ -6,13 +6,11 @@ config_dir="$DIR/themes"
 
 # List all configuration files in the directory
 config_files=($(realpath "$config_dir"/*.rasi))
-echo "$config_files" >&2
 # Get a random index to select a configuration
 num_configs=${#config_files[@]}
 random_index=$(($RANDOM % num_configs))
 
 # Select a random configuration file and print it
 selected_config="${config_files[random_index]}"
-echo "$selected_config" >&2
 
 echo "$selected_config"

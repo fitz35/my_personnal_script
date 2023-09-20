@@ -14,6 +14,14 @@ You can launch the dispatch.sh script like this :
 
 You can launch rofi with the same command. It will load a random configuration file.
 
+## Nix integration usage
+
+To [run](https://www.tweag.io/blog/2020-05-25-flakes/) a test with the nix integration :
+
+```shell
+nix shell --command hello
+```
+
 # Script description
 
 ## github_menu
