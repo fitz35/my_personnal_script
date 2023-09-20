@@ -32,3 +32,19 @@ def load_config():
         config.update(user_config)
 
     return config
+
+
+def add_trailing_slash(input_string : str):
+    """
+    Add a trailing '/' character to the input string if it doesn't already end with one.
+
+    Args:
+        input_string (str): The input string.
+
+    Returns:
+        str: The modified string with a trailing '/' character.
+    """
+    if not input_string.endswith('/'):
+        return input_string + '/'
+    else:
+        return input_string

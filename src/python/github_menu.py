@@ -44,11 +44,11 @@ for parent_folder in parent_folders:
 
 
 subfolders = parent_inside_folder + hand_picked_folders
-
+subfolders_string = "\n".join(subfolders)
 # --------------------- run rofi command ---------------------
 
 # Equivalent of rofi command
-CHOICE = subprocess.getoutput(f"printf '%s\\n' {' '.join(subfolders)} | sh {os.path.join(DIR, '../my_script.sh')} rofi -dmenu -p 'Select a folder to open {os.sys.argv[1]} in '")
+CHOICE = subprocess.getoutput(f"printf \"{subfolders_string}\" | sh {os.path.join(DIR, '../my_script.sh')} rofi -dmenu -p 'Select a folder to open {os.sys.argv[1]} in '")
 
 if CHOICE:
     if CHOICE in subfolders:
@@ -57,7 +57,9 @@ if CHOICE:
         else:
             selected_folder = os.path.join(inside_folder_to_parent[CHOICE], CHOICE)
         
+        selected_folder = common.add_trailing_slash(selected_folder)
 
+        print(f"Opening {os.sys.argv[1]} in {selected_folder}")
         subprocess.run(["sh", option, selected_folder])
         exit(0)
 
