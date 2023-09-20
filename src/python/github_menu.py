@@ -29,15 +29,18 @@ if not os.path.exists(option):
     exit(1)
 
 # --------------------- check paths ---------------------
-# extends home the hand_picked_folders list 
-hand_picked_folders = [os.path.expanduser(folder) for folder in hand_picked_folders]
 # extends home the parent_folder
 parent_folders = [os.path.expanduser(folder) for folder in parent_folders]
 
 # load all the folders inside the parent_folders
+inside_folder_to_parent = {}
 parent_inside_folder = []
 for parent_folder in parent_folders:
-    parent_inside_folder += [folder for folder in os.listdir(parent_folder) if os.path.isdir(os.path.join(parent_folder, folder))]
+    tmp = [folder for folder in os.listdir(parent_folder) if os.path.isdir(os.path.join(parent_folder, folder))]
+    parent_inside_folder += tmp
+    for folder in tmp:
+        inside_folder_to_parent[folder] = parent_folder
+    
 
 
 subfolders = parent_inside_folder + hand_picked_folders
@@ -48,8 +51,13 @@ subfolders = parent_inside_folder + hand_picked_folders
 CHOICE = subprocess.getoutput(f"printf '%s\\n' {' '.join(subfolders)} | sh {os.path.join(DIR, '../my_script.sh')} rofi -dmenu -p 'Select a folder to open {os.sys.argv[1]} in '")
 
 if CHOICE:
-    if CHOICE in parent_inside_folder:
-        selected_folder = CHOICE
+    if CHOICE in subfolders:
+        if CHOICE in hand_picked_folders:
+            selected_folder = os.path.expanduser(CHOICE)
+        else:
+            selected_folder = os.path.join(inside_folder_to_parent[CHOICE], CHOICE)
+        
+
         subprocess.run([option, selected_folder])
         exit(0)
 
