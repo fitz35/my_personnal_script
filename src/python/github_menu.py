@@ -58,7 +58,7 @@ if CHOICE:
             selected_folder = os.path.join(inside_folder_to_parent[CHOICE], CHOICE)
         
 
-        subprocess.run([option, selected_folder])
+        subprocess.run(["sh", option, selected_folder])
         exit(0)
 
 print("No folder selected.")
