@@ -3,6 +3,7 @@
 This the repository where my automation script for my linux are.
 
 * [ ] add package dependancies
+* [ ] fix xdotool to use clavier systems
 
 # Usage
 
