@@ -29,10 +29,11 @@
           buildInputs = with pkgs; [
             rofi
             python3
-            i3
             i3lock
             kitty
             feh
+            xdotool # auto type  
+            xclip # copy paste in command line
           ];
 
           buildPhase = ''
