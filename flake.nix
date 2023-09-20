@@ -21,12 +21,13 @@
         (system: f nixpkgs.legacyPackages.${system});
 
       # Definition of your personal script theme package
-      myPersonalScriptTheme = { pkgs, ... }:
-        pkgs.stdenv.mkDerivation {
+      myPersonalScriptTheme = { pkgs, lib, ... } :
+        pkgs.stdenv.mkDerivation rec {
           name = "my_personnal_script_theme";
           src = self;
 
-          buildInputs = with pkgs; [
+          build_env = with pkgs; [
+            # Add run-time dependencies here
             rofi
             python3
             i3lock
@@ -34,6 +35,11 @@
             feh
             xdotool # auto type  
             xclip # copy paste in command line
+          ];
+
+          buildInputs = with pkgs; [
+            # Add build-time dependencies here
+            makeWrapper # make available environment at runtime
           ];
 
           buildPhase = ''
@@ -49,6 +55,8 @@
 
             # only expose my_script to the user (chmod +x)
             chmod +x $out/bin/my_script;
+
+            wrapProgram $out/bin/my_script --prefix PATH : ${lib.makeBinPath build_env}
           '';
         };
     in
@@ -56,7 +64,7 @@
       # Package definitions for various architectures
       packages = eachSystem
         (pkgs: {
-          default = myPersonalScriptTheme { inherit pkgs; };
+          default = myPersonalScriptTheme { inherit pkgs; inherit (pkgs) lib; };
         });
     };
 }
