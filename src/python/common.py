@@ -12,11 +12,11 @@ SRC_PATH = os.path.join(DIR, "..")
 DEFAULT_CONFIG = os.path.join(SRC_PATH, "default_config.json")
 CONFIG_PATH = os.path.expanduser("~/.config/my_script/config.json")
 
-def load_config():
+def load_config() -> dict:
     """
     Load the config file. merge the default config and the user config.
     """
-    def load_json_file(filename):
+    def load_json_file(filename) -> dict:
         if not os.path.exists(filename):
             return None
 

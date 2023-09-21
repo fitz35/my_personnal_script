@@ -6,5 +6,9 @@
         "hand_picked_folders" : [
             
         ]
+    },
+
+    "greenclip" : {
+        "keyboard_layout" : "fr"
     }
 }

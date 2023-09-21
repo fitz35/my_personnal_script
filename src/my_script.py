@@ -54,8 +54,16 @@ arguments = sys.argv[2:]
 if is_in_list(command, scripts):
     command_dir = os.path.join(LIB_PATH, "script")
     command_path = os.path.join(command_dir, f"{command}.sh")
+
+    # get parameters from config and pass it threw env variable to script
+    env_vars = os.environ.copy()
+    if command in config:
+        for key, value in config[command].items():
+            env_vars[key] = value
+
+
     os.chdir(command_dir)
-    subprocess.run(["sh", f"{command_path}"] + arguments)
+    subprocess.run(["sh", f"{command_path}"] + arguments, env=env_vars)
     sys.exit(0)
 
 # Check if the command is in the list of python scripts
