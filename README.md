@@ -55,4 +55,8 @@ You can create custom option scripts for specific actions in the `github_menu_op
 
 Suppose you have a GitHub repository in the `~/Documents/github/` directory, and you want to list its subfolders and perform actions on them. You can use this script to easily select the desired folder and execute custom actions.
 
-## chronometer
+## Greenclip
+
+This [script](https://github.com/erebe/greenclip) open a roffi menu to choose a clipboard entry. Then use xclip and [xdotool](https://github.com/jordansissel/xdotool).
+
+> WARN : Xdotool has a [bug](https://unix.stackexchange.com/questions/139959/type-some-text-with-xdotool-independently-of-the-keyboard-layout) if the file `.xinitrc` doesn't set the keyboard layout with `setxkbmap fr` it will bug and use the us layout.
