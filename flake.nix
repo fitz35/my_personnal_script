@@ -31,6 +31,7 @@
             rofi
             python3
             i3lock
+            i3lock-color
             kitty
             feh
             xdotool # auto type  

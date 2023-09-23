@@ -59,4 +59,4 @@ Suppose you have a GitHub repository in the `~/Documents/github/` directory, and
 
 This [script](https://github.com/erebe/greenclip) open a roffi menu to choose a clipboard entry. Then use xclip and [xdotool](https://github.com/jordansissel/xdotool).
 
-> WARN : Xdotool has a [bug](https://unix.stackexchange.com/questions/139959/type-some-text-with-xdotool-independently-of-the-keyboard-layout) if the file `.xinitrc` doesn't set the keyboard layout with `setxkbmap fr` it will bug and use the us layout.
+> WARN : Xdotool type command has a [bug](https://unix.stackexchange.com/questions/139959/type-some-text-with-xdotool-independently-of-the-keyboard-layout) if the file `.xinitrc` doesn't set the keyboard layout with `setxkbmap fr` it will bug and use the us layout.
