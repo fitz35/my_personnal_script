@@ -14,7 +14,8 @@ scripts = [
     "greenclip",
     "lock",
     "logout_menu",
-    "wallpaper"
+    "wallpaper",
+    "manage_disk"
 ]
 
 python_scripts = [

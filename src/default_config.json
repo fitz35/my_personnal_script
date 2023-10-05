@@ -6,5 +6,8 @@
         "hand_picked_folders" : [
             
         ]
+    },
+    "manage_disk" : {
+        "mount_point" : "~/disk/"
     }
 }

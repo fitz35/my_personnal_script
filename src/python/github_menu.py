@@ -1,4 +1,5 @@
 import os
+import sys
 import subprocess
 
 import common as common
@@ -16,13 +17,13 @@ parent_folders = config["github_menu"]["parent_folders"]
 
 # --------------------- check arguments ---------------------
 
-if len(os.sys.argv) != 2:
-    print(f"Usage: {os.sys.argv[0]} option")
+if len(sys.argv) != 2:
+    print(f"Usage: {sys.argv[0]} option")
     exit(1)
 
 # --------------------- check options ---------------------
 
-option = os.path.join(DIR, "github_menu_options", f"{os.sys.argv[1]}.sh")
+option = os.path.join(DIR, "github_menu_options", f"{sys.argv[1]}.sh")
 
 if not os.path.exists(option):
     print(f"Error: {option} does not exist")
@@ -48,7 +49,7 @@ subfolders_string = "\n".join(subfolders)
 # --------------------- run rofi command ---------------------
 
 # Equivalent of rofi command
-CHOICE = subprocess.getoutput(f"printf \"{subfolders_string}\" | sh {os.path.join(DIR, '../my_script.sh')} rofi -dmenu -p 'Select a folder to open {os.sys.argv[1]} in '")
+CHOICE = subprocess.getoutput(f"printf \"{subfolders_string}\" | sh {os.path.join(DIR, '../my_script.sh')} rofi -dmenu -p 'Select a folder to open {sys.argv[1]} in '")
 
 if CHOICE:
     if CHOICE in subfolders:
@@ -59,7 +60,7 @@ if CHOICE:
         
         selected_folder = common.add_trailing_slash(selected_folder)
 
-        print(f"Opening {os.sys.argv[1]} in {selected_folder}")
+        print(f"Opening {sys.argv[1]} in {selected_folder}")
         subprocess.run(["sh", option, selected_folder])
         exit(0)
 

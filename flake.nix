@@ -35,6 +35,7 @@
             feh
             xdotool # auto type  
             xclip # copy paste in command line
+            udisks # mount usb
           ];
 
           buildInputs = with pkgs; [

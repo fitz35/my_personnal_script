@@ -16,7 +16,7 @@ def load_config() -> dict:
     """
     Load the config file. merge the default config and the user config.
     """
-    def load_json_file(filename) -> dict:
+    def load_json_file(filename) -> dict | None:
         if not os.path.exists(filename):
             return None
 
@@ -24,11 +24,13 @@ def load_config() -> dict:
             return json.load(file)
 
     default_config = load_json_file(DEFAULT_CONFIG)
+    if default_config is None:
+        raise Exception(f"Error: {DEFAULT_CONFIG} does not exist")
     user_config = load_json_file(CONFIG_PATH)
 
     # Merge the two configs
     config = default_config
-    if user_config:
+    if user_config is not None:
         config.update(user_config)
 
     return config
