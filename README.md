@@ -25,6 +25,10 @@ nix shell --command hello
 
 # Script description
 
+## Manage_disk
+
+Need `services.udisks2`, and the user must be in the `disk` group, to work.
+
 ## github_menu
 
 ### Usage
