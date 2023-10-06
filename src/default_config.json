@@ -8,6 +8,6 @@
         ]
     },
     "manage_disk" : {
-        "mount_point" : "~/disk/"
+        "mount_point_dir" : "~/Documents/disk/"
     }
 }
