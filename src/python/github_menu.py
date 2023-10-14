@@ -38,11 +38,13 @@ inside_folder_to_parent = {}
 parent_inside_folder = []
 for parent_folder in parent_folders:
     tmp = [folder for folder in os.listdir(parent_folder) if os.path.isdir(os.path.join(parent_folder, folder))]
+    tmp = sorted(tmp, key=lambda x: os.path.getmtime(os.path.join(parent_folder, x)), reverse=True)  # Sort by modification date
     parent_inside_folder += tmp
     for folder in tmp:
         inside_folder_to_parent[folder] = parent_folder
-    
 
+# To sort hand_picked_folders by modification date too (if you want this behavior)
+hand_picked_folders = sorted(hand_picked_folders, key=lambda x: os.path.getmtime(os.path.expanduser(x)), reverse=True)
 
 subfolders = parent_inside_folder + hand_picked_folders
 subfolders_string = "\n".join(subfolders)
