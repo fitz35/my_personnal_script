@@ -1,5 +1,7 @@
 import os
 import subprocess
+# Equivalent of DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR = os.path.dirname(os.path.abspath(__file__))
 
 VPN_CONFIG_FOLDER = os.path.expanduser("~/.config/openvpn/")
 
@@ -18,16 +20,17 @@ for client_folder in client_folders:
             for line in env_content.split("\n"):
                 if line and not line.startswith("#"):
                     key, value = line.split("=", 1)
-                    env_values[key] = value
+                    env_values[key] = value.strip('"')
 
         if "NAME" in env_values.keys() and "TYPE" in env_values.keys():
             # 3 type of VPN: openvpn, openconnect, sshpass
+            print(f"Found {env_values['NAME']} ({env_values['TYPE']})")
             if env_values["TYPE"] == "openvpn":
                 options.append((f"{env_values['NAME']}", f"sudo openvpn --cd {VPN_CONFIG_FOLDER} --config {os.path.join(client_folder, 'client.ovpn')} --auth-nocache --auth-user-pass {os.path.join(client_folder, 'pass.txt')}"))
             elif env_values["TYPE"] == "openconnect":
                 options.append((f"{env_values['NAME']}", f'echo -e "{env_values["PASSWORD"]}" | sudo openconnect --protocol anyconnect --user {env_values["LOGIN"]} --authgroup {env_values["GROUP"]} --server {env_values["SERVER"]}'))
             elif env_values["TYPE"] == "sshpass":
-                options.append((f"{env_values['NAME']}", f'export TERM=xterm-256color; sshpass -p {env_values["PASSWORD"]} ssh -t -p {env_values["PORT"]} {env_values["USER"]}@{env_values["SERVER"]}'))
+                options.append((f"{env_values['NAME']}", f'export TERM=xterm-256color; sshpass -p {env_values["PASSWORD"]} ssh -t -p {env_values["SERVER_PORT"]} {env_values["USER"]}@{env_values["SERVER_NAME"]}'))
             else:
                 print(f"Error: {client_folder} has an unknown TYPE value")
 
@@ -44,7 +47,7 @@ for opt in options:
     options_string += opt[0] + "\n"
 
 # Display Rofi menu
-choice = subprocess.getoutput(f'echo "{options_string}" | rofi -dmenu -p "System"')
+choice = subprocess.getoutput(f"printf \"{options_string}\" | sh {os.path.join(DIR, '../my_script.sh')} rofi -dmenu -p 'Select a vpn'")
 
 
 # Execute the corresponding command
@@ -52,5 +55,5 @@ for option, command in options:
     if choice == option:
         if command:  # if command is not empty
             full_command = f'kitty -e bash -c "{command}; echo -e \\"Waiting 100s...\\"; sleep 100"'
-            os.system(full_command)
+            subprocess.Popen(full_command, shell=True)
         break

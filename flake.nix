@@ -35,6 +35,8 @@
             feh
             xdotool # auto type  
             xclip # copy paste in command line
+
+            sshpass
           ];
 
           buildInputs = with pkgs; [
