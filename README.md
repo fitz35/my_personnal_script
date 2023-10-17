@@ -29,6 +29,8 @@ nix shell --command hello
 
 Have 3 possible way to use them. Create a folder in the `.config/openvpn/client/` folder for each entry.
 
+> WARN : add the fingerprint before using this menu (run the command with hand one time)
+
 ### openconnect entry
 
 Need a .env :
