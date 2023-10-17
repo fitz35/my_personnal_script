@@ -25,6 +25,53 @@ nix shell --command hello
 
 # Script description
 
+## vpn_menu
+
+Have 3 possible way to use them. Create a folder in the `.config/openvpn/client/` folder for each entry.
+
+### openconnect entry
+
+Need a .env :
+
+```shell
+NAME="󰒄 INSA Lyon VPN"
+TYPE="openconnect"
+SERVER="..."
+GROUP="....."
+LOGIN="....."
+PASSWORD="****"
+```
+
+### sshpass entry
+
+.env file :
+
+```shell
+NAME=" Uni Passau Server"
+TYPE="sshpass"
+SERVER_NAME="..."
+SERVER_PORT="...."
+USER="..."
+PASSWORD="..."
+```
+
+### openvpn entry
+
+A .env file :
+
+```shell
+# Uni Passau VPN
+NAME="󰒄 Uni Passau VPN"
+TYPE="openvpn"
+```
+
+A `client.ovpn` (containing the public certificate) file and a `pass.txt` file with : 
+
+```shell
+your_login
+your_password
+```
+
 ## Manage_disk
 
 Need `services.udisks2`, and the user must be in the `disk` group, to work.
