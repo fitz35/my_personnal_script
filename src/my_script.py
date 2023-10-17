@@ -21,6 +21,7 @@ scripts = [
 python_scripts = [
     "uptime",
     "github_menu",
+    "vpn_menu",
 ]
 
 
