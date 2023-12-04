@@ -2,7 +2,7 @@
   description = "flake support my_personnal_script nixos module";
   
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
     # Add other inputs as needed
   };
 
@@ -22,6 +22,9 @@
 
       # Definition of your personal script theme package
       myPersonalScriptTheme = { pkgs, lib, ... } :
+        let
+          glibcLocales = pkgs.glibcLocales;
+        in
         pkgs.stdenv.mkDerivation rec {
           name = "my_personnal_script_theme";
           src = self;
@@ -42,6 +45,7 @@
           buildInputs = with pkgs; [
             # Add build-time dependencies here
             makeWrapper # make available environment at runtime
+            glibcLocales # to have locale
           ];
 
           buildPhase = ''
@@ -58,7 +62,7 @@
             # only expose my_script to the user (chmod +x)
             chmod +x $out/bin/my_script;
 
-            wrapProgram $out/bin/my_script --prefix PATH : ${lib.makeBinPath build_env}
+            wrapProgram $out/bin/my_script --prefix PATH : ${lib.makeBinPath build_env} --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
           '';
         };
     in
