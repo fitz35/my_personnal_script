@@ -23,6 +23,12 @@ To [run](https://www.tweag.io/blog/2020-05-25-flakes/) a test with the nix integ
 nix shell --command hello
 ```
 
+Need 
+```nix
+experimental-features = nix-command flakes auto-allocate-uids configurable-impure-env
+```
+enabled inside the `/etc/nix/nix.conf` file if using nix.
+
 # Script description
 
 ## vpn_menu
