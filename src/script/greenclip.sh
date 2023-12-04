@@ -3,7 +3,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # get the window id of the active window to paste into
 WINDOW_ID=$(xdotool getactivewindow)
-sh "$DIR/../my_script.sh" rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
+$DIR/../my_script.sh rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
 sleep 0.5
 
 # Capture the selection

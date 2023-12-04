@@ -4,6 +4,9 @@ import sys
 
 import python.common as common
 
+# shell instance
+SHELL = "bash"
+
 # This script is the entry point of the project.
 DIR = os.path.dirname(os.path.realpath(__file__))
 LIB_PATH = DIR
@@ -65,7 +68,7 @@ if is_in_list(command, scripts):
 
 
     os.chdir(command_dir)
-    subprocess.run(["sh", f"{command_path}"] + arguments, env=env_vars)
+    subprocess.run([f"{command_path}"] + arguments, env=env_vars)
     sys.exit(0)
 
 # Check if the command is in the list of python scripts
@@ -83,7 +86,7 @@ if "rofi" in command:
 
     random_rofi_path = os.path.join(rofi_folder, "random_rofi.sh")
     # You might need to adjust the following line depending on the exact requirements
-    rofi_config = subprocess.run(["sh", f"{random_rofi_path}"], capture_output=True, text=True).stdout.strip()
+    rofi_config = subprocess.run([f"{random_rofi_path}"], capture_output=True, text=True).stdout.strip()
 
     subprocess.run(["rofi"] + arguments + ["-config", rofi_config])
     sys.exit(0)
