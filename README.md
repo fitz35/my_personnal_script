@@ -5,6 +5,8 @@ This the repository where my automation script for my linux are.
 * [ ] add package dependancies
 * [ ] fix xdotool to use clavier systems
 
+> Warn : need to use unstable for libcLocales
+
 # Usage
 
 You can launch the dispatch.sh script like this :setxkb;qpsetxkb;qp
