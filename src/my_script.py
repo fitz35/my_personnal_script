@@ -64,7 +64,7 @@ if is_in_list(command, scripts):
     env_vars = os.environ.copy()
     if command in config:
         for key, value in config[command].items():
-            env_vars[key] = value
+            env_vars[key] = str(value)
 
 
     os.chdir(command_dir)
