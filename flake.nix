@@ -33,7 +33,6 @@
             # Add run-time dependencies here
             rofi
             python3
-            i3lock-color
             kitty
             feh
             xdotool # auto type  
