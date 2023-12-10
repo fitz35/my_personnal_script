@@ -15,6 +15,7 @@ scripts = [
     "chronometer",
     "timer",
     "greenclip",
+    "lock",
     "logout_menu",
     "wallpaper",
     "manage_disk"

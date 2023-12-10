@@ -35,6 +35,7 @@
             python3
             kitty
             feh
+            i3lock-color
             xdotool # auto type  
             xclip # copy paste in command line
 
