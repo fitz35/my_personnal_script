@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # ROfi menu
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
