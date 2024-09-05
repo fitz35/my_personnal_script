@@ -1,8 +1,43 @@
+import enum
 import os
 import sys
 import subprocess
 
 import common as common
+
+
+def open_vscode(directory : str):
+    # Change to the specified directory
+    os.chdir(directory)
+
+    # Check if a flake.nix file exists in the current directory
+    if os.path.exists("flake.nix"):
+        try:
+            # If flake.nix exists, use nix develop to set up the environment and open VSCode
+            subprocess.run(["nix", "develop", "--command", "bash", "-c", "code ."], check=True)
+        except subprocess.CalledProcessError:
+            # If nix command fails, fallback to just opening VSCode
+            print("nix command failed. Fallback to 'code .'")
+            subprocess.run(["code", "."])
+    else:
+        # If flake.nix doesn't exist, simply open VSCode in the current directory
+        subprocess.run(["code", "."])
+
+class Option(enum.Enum):
+    CODE = "code"
+
+    @staticmethod
+    def get_from_string(option : str):
+        if option == "code":
+            return Option.CODE
+        else:
+            raise ValueError(f"Unknown option: {option}")
+        
+    def get_fn(self):
+        if self == Option.CODE:
+            return open_vscode
+        else:
+            raise ValueError(f"Unknown option: {self}")
 
 # Equivalent of DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 DIR = os.path.dirname(os.path.abspath(__file__))
@@ -23,11 +58,7 @@ if len(sys.argv) != 2:
 
 # --------------------- check options ---------------------
 
-option = os.path.join(DIR, "github_menu_options", f"{sys.argv[1]}.sh")
-
-if not os.path.exists(option):
-    print(f"Error: {option} does not exist")
-    exit(1)
+option = Option.get_from_string(sys.argv[1])
 
 # --------------------- check paths ---------------------
 # extends home the parent_folder
@@ -63,7 +94,7 @@ if CHOICE:
         selected_folder = common.add_trailing_slash(selected_folder)
 
         print(f"Opening {sys.argv[1]} in {selected_folder}")
-        subprocess.run(["sh", option, selected_folder])
+        option.get_fn()(selected_folder)
         exit(0)
 
 print("No folder selected.")
