@@ -51,7 +51,7 @@ subfolders_string = "\n".join(subfolders)
 # --------------------- run rofi command ---------------------
 
 # Equivalent of rofi command
-CHOICE = subprocess.getoutput(f"printf \"{subfolders_string}\" | sh {os.path.join(DIR, '../my_script.sh')} rofi -dmenu -p 'Select a folder to open {sys.argv[1]} in '")
+CHOICE = subprocess.getoutput(f"printf \"{subfolders_string}\" | {os.path.join(DIR, '../my_script.sh')} rofi -dmenu -p 'Select a folder to open {sys.argv[1]} in '")
 print(CHOICE)
 if CHOICE:
     if CHOICE in subfolders:
