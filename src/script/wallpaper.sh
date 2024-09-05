@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Infinite loop
 while true; do
