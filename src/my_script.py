@@ -5,6 +5,8 @@ import subprocess
 import sys
 
 import python.common as common
+import python.github_menu as github_menu
+import python.uptime as uptime
 
 # This script is the entry point of the project.
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -20,11 +22,11 @@ scripts = [
     "manage_disk"
 ]
 
-python_scripts = [
-    "uptime",
-    "github_menu",
-    "vpn_menu",
-]
+python_scripts = {
+    "uptime": uptime.uptime_command,
+    "github_menu": github_menu.github_menu_command,
+    #"vpn_menu": vpn_menu,
+}
 
 
 # --------------------- load config---------------------
@@ -95,11 +97,8 @@ if is_in_list(command, scripts):
     sys.exit(0)
 
 # Check if the command is in the list of python scripts
-if is_in_list(command, python_scripts):
-    command_dir = os.path.join(LIB_PATH, "python")
-    command_path = os.path.join(command_dir, f"{command}.py")
-    os.chdir(command_dir)
-    subprocess.run(["python3", f"{command_path}"] + arguments)
+if is_in_list(command, python_scripts.keys()):
+    python_scripts[command](DIR, config, sys.argv)
     sys.exit(0)
 
 # ROFI: call rofi with custom config
