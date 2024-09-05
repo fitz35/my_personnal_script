@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Define a function to check if a string is in a list
 is_in_list() {

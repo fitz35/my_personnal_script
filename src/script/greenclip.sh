@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # get the window id of the active window to paste into

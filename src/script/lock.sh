@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # This script is a wrapper for i3lock-color
 # It sets the colors and options for i3lock-color
 # i3lock-color repo: https://github.com/Raymo111/i3lock-color
