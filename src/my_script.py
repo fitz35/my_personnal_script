@@ -1,11 +1,10 @@
+import glob
 import os
+import random
 import subprocess
 import sys
 
 import python.common as common
-
-# shell instance
-SHELL = "bash"
 
 # This script is the entry point of the project.
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -31,6 +30,30 @@ python_scripts = [
 # --------------------- load config---------------------
 
 config = common.load_config()
+
+# --------------------- load rofi ---------------------
+
+def select_random_rofi_config(path : str):
+    # Get the directory of the current script
+    dir_path = os.path.join(path, "rofi")
+    
+    # Directory containing Rofi configuration files
+    config_dir = os.path.join(dir_path, "themes")
+
+    # List all configuration files in the directory
+    config_files = glob.glob(os.path.join(config_dir, "*.rasi"))
+    
+    if not config_files:
+        print("No configuration files found.")
+        sys.exit(1)
+
+    # Get a random index to select a configuration
+    random_index = random.randint(0, len(config_files) - 1)
+
+    # Select a random configuration file
+    selected_config = config_files[random_index]
+
+    return selected_config
 
 
 # ----------------------------------------------------
@@ -80,13 +103,9 @@ if is_in_list(command, python_scripts):
     sys.exit(0)
 
 # ROFI: call rofi with custom config
-if "rofi" in command:
-    rofi_folder = os.path.join(LIB_PATH, "rofi")
-    os.chdir(rofi_folder)
-
-    random_rofi_path = os.path.join(rofi_folder, "random_rofi.sh")
+if "rofi" in command:    
     # You might need to adjust the following line depending on the exact requirements
-    rofi_config = subprocess.run([f"{random_rofi_path}"], capture_output=True, text=True).stdout.strip()
+    rofi_config = select_random_rofi_config(LIB_PATH)
 
     subprocess.run(["rofi"] + arguments + ["-config", rofi_config])
     sys.exit(0)
