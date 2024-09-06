@@ -3,7 +3,7 @@
 # if the first argument is -v or --version, print the version and exit
 
 if [ "$1" == "-v" ] || [ "$1" == "--version" ]; then
-    echo "my_script version 1.0.0"
+    echo "my_script version 1.0.1"
     exit 0
 fi
 
