@@ -68,6 +68,7 @@ def github_menu_command(dir : str, config : dict, args : list):
     hand_picked_folders = sorted(hand_picked_folders, key=lambda x: os.path.getmtime(os.path.expanduser(x)), reverse=True)
 
     subfolders = parent_inside_folder + hand_picked_folders
+    print(subfolders)
     subfolders_string = "\n".join(subfolders)
     # --------------------- run rofi command ---------------------
 
@@ -86,5 +87,9 @@ def github_menu_command(dir : str, config : dict, args : list):
             print(f"Opening {args[1]} in {selected_folder}")
             option.get_fn()(selected_folder)
             exit(0)
-
-    print("No folder selected.")
+        else:
+            print("The selected folder is not in the list.")
+            exit(1)
+    else:
+        print("No folder selected.")
+        exit(1)
