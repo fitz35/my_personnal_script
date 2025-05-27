@@ -24,6 +24,15 @@
       myPersonalScriptTheme = { pkgs, lib, ... } :
         let
           glibcLocales = pkgs.glibcLocales;
+
+          # Define Python environment with matplotlib
+          pythonEnv = pkgs.python3.withPackages (ps: with ps; [
+            matplotlib
+
+            notebook
+            jupyterlab
+            # Add other Python packages here as needed
+          ]);
         in
         pkgs.stdenv.mkDerivation rec {
           name = "my_personnal_script_theme";
@@ -33,6 +42,7 @@
             # Add run-time dependencies here
             rofi
             python3
+            pythonEnv # Python environment with matplotlib
             kitty
             feh
             i3lock-color
