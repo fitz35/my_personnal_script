@@ -77,6 +77,9 @@
           notebook
           jupyterlab
           pip
+
+          numpy
+          seaborn
         ];
       in pkgs.mkShell {
         buildInputs = [ python ] ++ pythonPackages;
