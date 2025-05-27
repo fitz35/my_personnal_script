@@ -1,6 +1,6 @@
 {
   description = "flake support my_personnal_script nixos module";
-  
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     # Add other inputs as needed
@@ -21,18 +21,9 @@
         (system: f nixpkgs.legacyPackages.${system});
 
       # Definition of your personal script theme package
-      myPersonalScriptTheme = { pkgs, lib, ... } :
+      myPersonalScriptTheme = { pkgs, lib, ... }:
         let
           glibcLocales = pkgs.glibcLocales;
-
-          # Define Python environment with matplotlib
-          pythonEnv = pkgs.python3.withPackages (ps: with ps; [
-            matplotlib
-
-            notebook
-            jupyterlab
-            # Add other Python packages here as needed
-          ]);
         in
         pkgs.stdenv.mkDerivation rec {
           name = "my_personnal_script_theme";
@@ -42,13 +33,11 @@
             # Add run-time dependencies here
             rofi
             python3
-            pythonEnv # Python environment with matplotlib
             kitty
             feh
             i3lock-color
-            xdotool # auto type  
-            xclip # copy paste in command line
-
+            xdotool    # auto type  
+            xclip      # copy paste in command line
             sshpass
           ];
 
@@ -72,15 +61,42 @@
             # only expose my_script to the user (chmod +x)
             chmod +x $out/bin/my_script;
 
-            wrapProgram $out/bin/my_script --prefix PATH : ${lib.makeBinPath build_env} --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
+            wrapProgram $out/bin/my_script \
+              --prefix PATH : ${lib.makeBinPath build_env} \
+              --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
           '';
         };
+
+
+      # Define the development shell
+      devShell = system: let
+        pkgs = nixpkgs.legacyPackages.${system};
+        python = pkgs.python3;
+        pythonPackages = with pkgs.python3Packages; [
+          matplotlib
+          notebook
+          jupyterlab
+          pip
+        ];
+      in pkgs.mkShell {
+        buildInputs = [ python ] ++ pythonPackages;
+
+        shellHook = ''
+          unset SOURCE_DATE_EPOCH
+        '';
+      };
+
     in
     {
       # Package definitions for various architectures
-      packages = eachSystem
-        (pkgs: {
-          default = myPersonalScriptTheme { inherit pkgs; inherit (pkgs) lib; };
-        });
+      packages = eachSystem (pkgs: {
+        default = myPersonalScriptTheme { inherit pkgs; inherit (pkgs) lib; };
+      });
+
+      # Development shells for various architectures
+      devShells = eachSystem (pkgs: {
+        default = devShell pkgs.system;
+      });
     };
 }
+
