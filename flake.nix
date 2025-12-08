@@ -2,7 +2,7 @@
   description = "flake support my_personnal_script nixos module";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     # Add other inputs as needed
   };
 
