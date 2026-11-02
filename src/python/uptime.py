@@ -1,3 +1,14 @@
+"""
+`my_script uptime [-display_entry]` : track how long the computer is on each day (polybar uptime module).
+
+Without argument (called periodically by polybar) : save the current uptime in ~/daily_uptime.txt,
+one line per boot "YYYY-MM-DD HH:MM:SS -  H:MM" (date of the last update - uptime of this boot),
+then print the cumulated uptime of today as HH:MM.
+With -display_entry (click on the module) : show today's lines in rofi.
+
+The files are analysed by analyze/ (copies of the file are kept in daily_uptime_save/).
+"""
+
 import os
 import subprocess
 from datetime import datetime

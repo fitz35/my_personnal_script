@@ -1,5 +1,5 @@
 #!/bin/bash
-# ROfi menu
+# Rofi menu to lock / logout / reboot / shutdown (i3 $mod+Escape, power button, polybar power icon)
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 

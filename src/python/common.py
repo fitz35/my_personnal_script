@@ -1,9 +1,9 @@
-
+"""
+Shared helpers of the python commands : config loading and path utilities.
+"""
 
 import json
 import os
-
-# common file
 
 
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -15,6 +15,10 @@ CONFIG_PATH = os.path.expanduser("~/.config/my_script/config.json")
 def load_config() -> dict:
     """
     Load the config file. merge the default config and the user config.
+
+    The merge is done on the first level only : a section of the user config
+    (e.g. "github_menu") replaces the whole default section, it is not merged key by key.
+    The user config is the dotfiles my_script/config.json, linked in ~/.config/my_script/.
     """
     def load_json_file(filename) -> dict | None:
         if not os.path.exists(filename):

@@ -1,4 +1,6 @@
 #!/bin/bash
+# Clipboard history (i3 $mod+v) : choose an entry of the greenclip history in rofi, then paste it in the active window.
+# Needs the greenclip daemon (services.greenclip in the nixos config).
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # get the window id of the active window to paste into

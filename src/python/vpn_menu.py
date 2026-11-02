@@ -1,3 +1,13 @@
+"""
+`my_script vpn_menu` : rofi menu to start a vpn or ssh connection in a kitty terminal (i3 $mod+w).
+
+Each folder of ~/.config/openvpn/client/ is an entry, described by its .env file (NAME, TYPE...).
+3 TYPE are supported (see the README for the .env content) :
+- openvpn : `sudo openvpn` with the client.ovpn and pass.txt files of the folder,
+- openconnect : `sudo openconnect` (anyconnect protocol), with LOGIN / GROUP / SERVER / PASSWORD,
+- sshpass : ssh with a password, with USER / SERVER_NAME / SERVER_PORT / PASSWORD.
+"""
+
 import os
 import shlex
 import subprocess

@@ -1,4 +1,5 @@
 #!/bin/bash
+# Helpers shared by the scripts of script/ (loaded with `source "$DIR/../common.sh"`)
 
 # Define a function to check if a string is in a list
 is_in_list() {
@@ -16,6 +17,7 @@ is_in_list() {
     return 1  # Return failure (string not found)
 }
 
+# Print a number of seconds as MM:SS (used by the chronometer and timer polybar modules)
 format_time() {
     local elapsed="$1"
     local minutes=$((elapsed / 60))

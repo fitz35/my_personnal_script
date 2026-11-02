@@ -1,4 +1,7 @@
 #!/bin/bash
+# Stopwatch of the polybar chronometer module : `my_script chronometer <toggle|reset|display>`
+# toggle : start / pause (the elapsed time is kept), reset : back to 00:00, display : print MM:SS (polled by polybar)
+# The state is kept in /tmp files, so it is lost at reboot.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 TIMER_FILE="/tmp/polybar_chrono" # This file will be used to check if the timer is running (and keep track of the start time)

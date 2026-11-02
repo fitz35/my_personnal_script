@@ -1,3 +1,11 @@
+"""
+Parsing and statistics of the uptime files written by `my_script uptime` (used by analyze.ipynb).
+
+Each line "YYYY-MM-DD HH:MM:SS -  H:MM" is the end time of a session and its duration :
+the sessions are fused when they overlap, then split by week day.
+Run this file to execute the tests.
+"""
+
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 import re
@@ -53,6 +61,7 @@ class UptimeRecord:
 
     @staticmethod
     def fuse(records: list["UptimeRecord"], tolerance: timedelta = timedelta(minutes=1)) -> list["UptimeRecord"]:
+        """Merge the records that overlap (or are separated by less than `tolerance`) into one session."""
         if not records:
             return []
 
@@ -74,6 +83,7 @@ class UptimeRecord:
         return fused
 
     def uptime_by_day(self) -> list[tuple[WeekDay, timedelta]]:
+        """Split the session at each midnight, and return the time spent on each week day."""
         daily_uptime = {day: timedelta(0) for day in WeekDay}
 
         current_start = self.start_time

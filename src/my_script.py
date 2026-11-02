@@ -1,3 +1,16 @@
+"""
+Dispatcher of my_script : `my_script <command> [arguments]`.
+
+3 kinds of commands :
+- shell scripts (`scripts`) : run script/<command>.sh. The section <command> of the config
+  (default_config.json merged with ~/.config/my_script/config.json) is given as env variables,
+  e.g. {"wallpaper": {"interval": 120}} gives $interval to wallpaper.sh.
+- python commands (`python_scripts`) : call fn(src_dir, config, sys.argv).
+- any command containing "rofi" : run rofi with the arguments and a random theme from rofi/themes/.
+
+Called by the i3 bindings and polybar modules of the dotfiles repository.
+"""
+
 import glob
 import os
 import random
@@ -9,10 +22,10 @@ import python.github_menu as github_menu
 import python.uptime as uptime
 import python.vpn_menu as vpn_menu
 
-# This script is the entry point of the project.
 DIR = os.path.dirname(os.path.realpath(__file__))
 LIB_PATH = DIR
 
+# shell scripts in script/ (polybar : chronometer, timer, logout_menu / i3 : greenclip, lock, wallpaper, manage_disk)
 scripts = [
     "chronometer",
     "timer",
@@ -23,6 +36,7 @@ scripts = [
     "manage_disk"
 ]
 
+# python commands, called with (src_dir, config, sys.argv) : their own arguments start at sys.argv[2]
 python_scripts = {
     "uptime": uptime.uptime_command,
     "github_menu": github_menu.github_menu_command,
@@ -37,6 +51,7 @@ config = common.load_config()
 # --------------------- load rofi ---------------------
 
 def select_random_rofi_config(path : str):
+    """Return the path of a random .rasi theme from <path>/rofi/themes/ (a different look at each rofi opening)."""
     # Get the directory of the current script
     dir_path = os.path.join(path, "rofi")
     
@@ -73,10 +88,6 @@ if len(sys.argv) < 2:
 # Change the working directory to the script's directory
 os.chdir(DIR)
 
-# I'm not sure what "common.sh" does, so I'll leave this commented out.
-# You'll need to translate "common.sh" into Python if it contains essential logic.
-# import common
-
 # Extract the first argument (the command)
 command = sys.argv[1]
 arguments = sys.argv[2:]
@@ -103,8 +114,8 @@ if is_in_list(command, python_scripts.keys()):
     sys.exit(0)
 
 # ROFI: call rofi with custom config
-if "rofi" in command:    
-    # You might need to adjust the following line depending on the exact requirements
+if "rofi" in command:
+    # the arguments are given as is to rofi (e.g. `my_script rofi -show drun`)
     rofi_config = select_random_rofi_config(LIB_PATH)
 
     subprocess.run(["rofi"] + arguments + ["-config", rofi_config])

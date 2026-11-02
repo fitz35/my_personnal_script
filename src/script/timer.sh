@@ -1,7 +1,11 @@
 #!/bin/bash
+# Countdown of the polybar timer module : `my_script timer <add [seconds]|toggle|reset|display>`
+# add : add (or remove, if negative) seconds to the countdown (1 by default, polybar scroll uses +5 / -5),
+# toggle : start / pause, reset : back to BASE_TIME, display : print MM:SS, then blink END / !-! when finished.
+# The state is kept in /tmp files, so it is lost at reboot.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-BASE_TIME=60
+BASE_TIME=60 # in seconds
 
 TIMER_FILE="/tmp/polybar_timer" # This file will be used to check if the timer is running (and keep track of the start time)
 ELAPSED_FILE="/tmp/polybar_timer_elapsed" # This file will be used to keep track of the elapsed time (pause doesn't reset the timer)

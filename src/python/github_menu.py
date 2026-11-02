@@ -1,3 +1,12 @@
+"""
+`my_script github_menu <code|terminal>` : rofi menu to open a project folder.
+
+The listed folders are (most recently modified first) :
+- the subfolders of each "parent_folders" of the config (e.g. "~/Documents/github/"),
+- the "hand_picked_folders" of the config.
+The selected folder is opened in vscode (`code`, i3 $mod+t) or in a kitty terminal (`terminal`, i3 $mod+Alt+t).
+"""
+
 import enum
 import os
 import subprocess
@@ -6,6 +15,7 @@ import python.common as common
 
 
 def open_vscode(directory : str):
+    """Open vscode in the directory, inside the `nix develop` shell when the folder has a flake.nix."""
     # Change to the specified directory
     os.chdir(directory)
 
@@ -27,6 +37,7 @@ def open_terminal(directory : str):
     subprocess.Popen(["kitty", "--directory", directory])
 
 class Option(enum.Enum):
+    """Action to do on the selected folder (the argument given after github_menu)."""
     CODE = "code"
     TERMINAL = "terminal"
 

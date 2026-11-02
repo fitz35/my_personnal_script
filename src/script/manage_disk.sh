@@ -1,4 +1,7 @@
 #!/bin/bash
+# Mount / unmount a disk from a rofi menu (i3 $mod+u), without root (udisksctl, the user must be in the "disk" group).
+# Selecting a mounted device unmounts it, otherwise it is mounted.
+# A symlink <label> -> mount point is created in $mount_point_dir (config "manage_disk", ~/Documents/disk/ by default).
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 

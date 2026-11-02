@@ -1,8 +1,8 @@
 #!/bin/bash
+# Change the wallpaper every $interval seconds (config "wallpaper"), with a random image of the dotfiles assets.
+# Started once by i3 at login and runs forever.
 
-# Infinite loop
 while true; do
-    # Your code here
     feh --bg-fill --randomize $HOME/.config/assets/background_image/*
-    sleep $interval  # Optional: Add a delay to reduce CPU usage
+    sleep $interval
 done
