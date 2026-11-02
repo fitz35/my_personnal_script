@@ -11,8 +11,8 @@ def uptime_command(dir : str, config : dict, args : list):
     now = datetime.now()
 
 
-    # Check if any arguments are passed
-    if len(args) > 1 and args[1] == "-display_entry":
+    # Check if any arguments are passed (args is sys.argv : [my_script.py, "uptime", ...])
+    if len(args) > 2 and args[2] == "-display_entry":
         def get_todays_uptimes(file_path: str, target_date: datetime):
             """Get all of today's uptimes."""
             uptimes = []
@@ -32,11 +32,14 @@ def uptime_command(dir : str, config : dict, args : list):
         
         # Display the uptimes using rofi
         menu_content = "\n".join(todays_uptimes)
-        subprocess.run(["my_script.sh", 'rofi', '-dmenu', '-p', 'Today\'s Uptimes'], input=menu_content, text=True)
+        subprocess.run([os.path.join(dir, "my_script.sh"), 'rofi', '-dmenu', '-p', 'Today\'s Uptimes'], input=menu_content, text=True)
         exit(0)
 
-    # Get the current system uptime and extract the uptime string
-    current_uptime = subprocess.check_output(["uptime"]).decode("utf-8").strip().split(",")[0].split("up ")[1]
+    # Get the current system uptime, formatted as " H:MM" like the `uptime` command
+    # (read from /proc/uptime : `uptime` prints "1 day, H:MM" after 24h, which can't be parsed)
+    with open("/proc/uptime") as f:
+        uptime_hours, uptime_minutes = divmod(int(float(f.read().split()[0])) // 60, 60)
+    current_uptime = f"{uptime_hours:2}:{uptime_minutes:02}"
 
     def read_last_line(file_path : str):
         with open(file_path, 'r') as file:

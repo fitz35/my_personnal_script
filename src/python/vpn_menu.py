@@ -1,59 +1,59 @@
 import os
+import shlex
 import subprocess
-# Equivalent of DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-DIR = os.path.dirname(os.path.abspath(__file__))
 
 VPN_CONFIG_FOLDER = os.path.expanduser("~/.config/openvpn/")
 
 CLIENT_FOLDER = os.path.join(VPN_CONFIG_FOLDER, "client")
 
-client_folders = [os.path.join(CLIENT_FOLDER, d) for d in os.listdir(CLIENT_FOLDER) if os.path.isdir(os.path.join(CLIENT_FOLDER, d))]
-options = []
 
-for client_folder in client_folders:
-    # get the value of the .env file
-    env_file = os.path.join(client_folder, ".env")
-    env_values = {}
-    if os.path.exists(env_file):
-        with open(env_file) as f:
-            env_content = f.read()
-            for line in env_content.split("\n"):
-                if line and not line.startswith("#"):
-                    key, value = line.split("=", 1)
-                    env_values[key] = value.strip('"')
+def vpn_menu_command(dir : str, config : dict, args : list):
+    client_folders = [os.path.join(CLIENT_FOLDER, d) for d in os.listdir(CLIENT_FOLDER) if os.path.isdir(os.path.join(CLIENT_FOLDER, d))]
+    # (name, command, env) : passwords are given threw env variables, so they don't appear in the process list
+    options = []
 
-        if "NAME" in env_values.keys() and "TYPE" in env_values.keys():
-            # 3 type of VPN: openvpn, openconnect, sshpass
-            print(f"Found {env_values['NAME']} ({env_values['TYPE']})")
-            if env_values["TYPE"] == "openvpn":
-                options.append((f"{env_values['NAME']}", f"sudo openvpn --cd {VPN_CONFIG_FOLDER} --config {os.path.join(client_folder, 'client.ovpn')} --auth-nocache --auth-user-pass {os.path.join(client_folder, 'pass.txt')}"))
-            elif env_values["TYPE"] == "openconnect":
-                options.append((f"{env_values['NAME']}", f'echo -e "{env_values["PASSWORD"]}" | sudo openconnect --protocol anyconnect --user {env_values["LOGIN"]} --authgroup {env_values["GROUP"]} --server {env_values["SERVER"]}'))
-            elif env_values["TYPE"] == "sshpass":
-                options.append((f"{env_values['NAME']}", f'export TERM=xterm-256color; sshpass -p {env_values["PASSWORD"]} ssh -t -p {env_values["SERVER_PORT"]} {env_values["USER"]}@{env_values["SERVER_NAME"]}'))
+    for client_folder in client_folders:
+        # get the value of the .env file
+        env_file = os.path.join(client_folder, ".env")
+        env_values = {}
+        if os.path.exists(env_file):
+            with open(env_file) as f:
+                env_content = f.read()
+                for line in env_content.split("\n"):
+                    if line and not line.startswith("#"):
+                        key, value = line.split("=", 1)
+                        env_values[key] = value.strip('"')
+
+            if "NAME" in env_values.keys() and "TYPE" in env_values.keys():
+                # 3 type of VPN: openvpn, openconnect, sshpass
+                print(f"Found {env_values['NAME']} ({env_values['TYPE']})")
+                # quote the values to avoid shell injection
+                q = {key: shlex.quote(value) for key, value in env_values.items()}
+                if env_values["TYPE"] == "openvpn":
+                    options.append((env_values['NAME'], f"sudo openvpn --cd {shlex.quote(VPN_CONFIG_FOLDER)} --config {shlex.quote(os.path.join(client_folder, 'client.ovpn'))} --auth-nocache --auth-user-pass {shlex.quote(os.path.join(client_folder, 'pass.txt'))}", {}))
+                elif env_values["TYPE"] == "openconnect":
+                    options.append((env_values['NAME'], f'printf "%s\\n" "$VPN_PASSWORD" | sudo openconnect --protocol anyconnect --passwd-on-stdin --user {q["LOGIN"]} --authgroup {q["GROUP"]} --server {q["SERVER"]}', {"VPN_PASSWORD": env_values["PASSWORD"]}))
+                elif env_values["TYPE"] == "sshpass":
+                    options.append((env_values['NAME'], f'export TERM=xterm-256color; sshpass -e ssh -t -p {q["SERVER_PORT"]} {q["USER"]}@{q["SERVER_NAME"]}', {"SSHPASS": env_values["PASSWORD"]}))
+                else:
+                    print(f"Error: {client_folder} has an unknown TYPE value")
+
             else:
-                print(f"Error: {client_folder} has an unknown TYPE value")
+                print(f"Error: {client_folder} isn't a known VPN client folder")
 
         else:
-            print(f"Error: {client_folder} isn't a known VPN client folder")
-        
-    else:
-        print(f"Error: {client_folder} does not contain a .env file")
+            print(f"Error: {client_folder} does not contain a .env file")
 
-# Display Rofi menu
-# Build the options string for the Rofi menu
-options_string = ""
-for opt in options:
-    options_string += opt[0] + "\n"
+    # Display Rofi menu
+    # Build the options string for the Rofi menu
+    options_string = "\n".join(opt[0] for opt in options)
 
-# Display Rofi menu
-choice = subprocess.getoutput(f"printf \"{options_string}\" | sh {os.path.join(DIR, '../my_script.sh')} rofi -dmenu -p 'Select a vpn'")
+    choice = subprocess.run(["sh", os.path.join(dir, "my_script.sh"), "rofi", "-dmenu", "-p", "Select a vpn"], input=options_string, text=True, capture_output=True).stdout.strip()
 
-
-# Execute the corresponding command
-for option, command in options:
-    if choice == option:
-        if command:  # if command is not empty
-            full_command = f'kitty -e bash -c "{command}; echo -e \\"Waiting 100s...\\"; sleep 100"'
-            subprocess.Popen(full_command, shell=True)
-        break
+    # Execute the corresponding command
+    for option, command, env in options:
+        if choice == option:
+            if command:  # if command is not empty
+                full_command = f'{command}; echo -e "Waiting 100s..."; sleep 100'
+                subprocess.Popen(["kitty", "-e", "bash", "-c", full_command], env={**os.environ, **env})
+            break

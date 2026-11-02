@@ -22,19 +22,28 @@ def open_vscode(directory : str):
         # If flake.nix doesn't exist, simply open VSCode in the current directory
         subprocess.run(["code", "."])
 
+def open_terminal(directory : str):
+    # Open a kitty terminal in the specified directory
+    subprocess.Popen(["kitty", "--directory", directory])
+
 class Option(enum.Enum):
     CODE = "code"
+    TERMINAL = "terminal"
 
     @staticmethod
     def get_from_string(option : str):
         if option == "code":
             return Option.CODE
+        elif option == "terminal":
+            return Option.TERMINAL
         else:
             raise ValueError(f"Unknown option: {option}")
-        
+
     def get_fn(self):
         if self == Option.CODE:
             return open_vscode
+        elif self == Option.TERMINAL:
+            return open_terminal
         else:
             raise ValueError(f"Unknown option: {self}")
 
@@ -72,8 +81,8 @@ def github_menu_command(dir : str, config : dict, args : list):
     subfolders_string = "\n".join(subfolders)
     # --------------------- run rofi command ---------------------
 
-    # Equivalent of rofi command
-    CHOICE = subprocess.getoutput(f"printf \"{subfolders_string}\" | {os.path.join(DIR, 'my_script.sh')} rofi -dmenu -p 'Select a folder to open {args[1]} in '")
+    # Equivalent of rofi command (folders given threw stdin, so special characters in names don't break the command)
+    CHOICE = subprocess.run([os.path.join(DIR, 'my_script.sh'), "rofi", "-dmenu", "-p", f"Select a folder to open {args[2]} in "], input=subfolders_string, text=True, capture_output=True).stdout.strip()
     print(CHOICE)
     if CHOICE:
         if CHOICE in subfolders:
@@ -84,7 +93,7 @@ def github_menu_command(dir : str, config : dict, args : list):
             
             selected_folder = common.add_trailing_slash(selected_folder)
 
-            print(f"Opening {args[1]} in {selected_folder}")
+            print(f"Opening {args[2]} in {selected_folder}")
             option.get_fn()(selected_folder)
             exit(0)
         else:

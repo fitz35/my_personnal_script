@@ -27,9 +27,10 @@ if [ -n "$SELECTED_ENTRY" ]; then
         echo "Unmounting $SELECTED_ENTRY..."
         udisksctl unmount -b "$SELECTED_ENTRY"
         
-        # Remove the symbolic link
+        # Remove the symbolic link (device name if no label)
         LABEL=$(lsblk -pno LABEL "$SELECTED_ENTRY")
-        rm "$USB_DIR_SYMLINK/$LABEL"
+        LABEL="${LABEL:-$(basename "$SELECTED_ENTRY")}"
+        rm -f "$USB_DIR_SYMLINK/$LABEL"
     else
         # If not mounted, mount the device
         echo "Mounting $SELECTED_ENTRY..."
@@ -38,8 +39,9 @@ if [ -n "$SELECTED_ENTRY" ]; then
         # Extract the mount point from the udisksctl output
         MOUNT_POINT=$(echo "$MOUNT_OUTPUT" | awk -F ' at ' '{print $2}' | sed 's/\.$//')
         
-        # Get the label of the device
+        # Get the label of the device (device name if no label)
         LABEL=$(lsblk -pno LABEL "$SELECTED_ENTRY")
+        LABEL="${LABEL:-$(basename "$SELECTED_ENTRY")}"
         
         # Create a symbolic link from USB_DIR_SYMLINK/label to the mount point
         ln -s "$MOUNT_POINT" "$USB_DIR_SYMLINK/$LABEL"

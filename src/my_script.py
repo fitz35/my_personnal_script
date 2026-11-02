@@ -7,6 +7,7 @@ import sys
 import python.common as common
 import python.github_menu as github_menu
 import python.uptime as uptime
+import python.vpn_menu as vpn_menu
 
 # This script is the entry point of the project.
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -25,7 +26,7 @@ scripts = [
 python_scripts = {
     "uptime": uptime.uptime_command,
     "github_menu": github_menu.github_menu_command,
-    #"vpn_menu": vpn_menu,
+    "vpn_menu": vpn_menu.vpn_menu_command,
 }
 
 
